@@ -1,6 +1,7 @@
 # fhir-rest-server
 prototype of very very simple crud rest server in python
 
+How2 install and run:
 
 - create database in postgres
 - run /sql/crate_db.sql
