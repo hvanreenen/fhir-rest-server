@@ -9,5 +9,6 @@ How2 install and run:
 - alter conn_string in config.py
 - install Flask
 - run server.py
+- test gets, posts, puts or deletes on the http: by fiddler or other tool
 
 
