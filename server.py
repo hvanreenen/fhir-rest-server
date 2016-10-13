@@ -35,6 +35,7 @@ def get_password(username):
 def unauthorized():
     return make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
+
 @app.route('/Patient/<int:id>', methods=['GET'])
 def get_patient(id):
     db = Database(config)
