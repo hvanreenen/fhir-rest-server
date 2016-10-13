@@ -38,19 +38,23 @@ def unauthorized():
 
 @app.route('/Patient/<int:id>', methods=['GET'])
 def get_patient(id):
-    db = Database(config)
-    row = db.read_patient(id)
-    p = Patient()
-    p.address = [Address()]
-    p.address[0].city = row['plaats']
-    p.address[0].country = row['land']
-    p.address[0].line = [row['straat'] ]
+    try:
+        db = Database(config)
+        row = db.read_patient(id)
+        p = Patient()
+        p.address = [Address()]
+        p.address[0].city = row['plaats']
+        p.address[0].country = row['land']
+        p.address[0].line = [row['straat'] ]
 
 
-    json =  p.as_json()
-    if not json:
-        return "niet gevonden", 404
-    return jsonify(json)
+        json =  p.as_json()
+        if not json:
+            return "niet gevonden", 404
+        return jsonify(json)
+    except Exception as ex:
+        print(ex.args[0])
+        return 'Er is een fout' + ex.args[0], 500
 
 
 
