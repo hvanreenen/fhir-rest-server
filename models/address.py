@@ -37,7 +37,7 @@ class Address(element.Element):
         """ District name (aka county).
         Type `str`. """
         
-        self.line = None  #type: str
+        self.line = None  #type: List[str]
         """ Street name, number, direction & P.O. Box etc..
         List of `str` items. """
         

@@ -91,3 +91,18 @@ class Database():
     def delete_resource(self, id):
         sql = """DELETE from res WHERE id = {}""".format(id)
         self.execute(sql)
+
+    def read_patient(self, id):
+
+        sql = """SELECT * FROM persoon WHERE id = {}
+        """.format(id)
+        rows = self.execute_read(sql)
+        row = {}
+        row['plaats'] = rows[0][1]
+        row['straat'] = rows[0][2]
+        row['land'] = rows[0][3]
+
+
+
+        return row
+
