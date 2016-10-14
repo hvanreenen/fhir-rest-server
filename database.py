@@ -94,14 +94,14 @@ class Database():
 
     def read_patient(self, id):
 
-        sql = """SELECT * FROM persoon WHERE id = {}
+        sql = """
+            SELECT achternaam
+            FROM persoon_hstage
+            WHERE _id = {}
         """.format(id)
         rows = self.execute_read(sql)
         row = {}
-        row['plaats'] = rows[0][1]
-        row['straat'] = rows[0][2]
-        row['land'] = rows[0][3]
-
+        row['achternaam'] = rows[0][0]
 
 
         return row
