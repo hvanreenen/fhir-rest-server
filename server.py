@@ -11,6 +11,7 @@ from models.patient import Patient
 from models.humanname import HumanName
 
 import os
+import datetime
 
 app = Flask(__name__)
 auth = HTTPBasicAuth()
@@ -48,6 +49,7 @@ def get_patient(id):
         p.name[0].prefix = [row['tussenvoegsel'], row['partnertussenvoegsel']]
         p.name[0].text = str(row['achternaam'])+str(row['partnerachternaam'] or '')
         p.gender = str(row['geslacht']).lower().replace('m', 'male').replace('v', 'female')
+        p.birthDate = datetime.datetime.strptime(row['geboortedatum'], "%Y-%m-%d %H:%M:%S.%f")
         # p.birthDate = row['geboortedatum']
         json = p.as_json()
         if not json:

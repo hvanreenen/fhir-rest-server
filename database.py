@@ -117,7 +117,7 @@ class Database():
             WHERE persoon_hstage._id = {}
         """.format(id)
         rows = self.execute_read(sql)
-        print(rows)
+
         row = {}
 
         row['voorletters'] = rows[0][0]
