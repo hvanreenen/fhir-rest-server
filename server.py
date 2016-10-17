@@ -1,3 +1,4 @@
+from http import server
 from flask import Flask, jsonify
 from flask import abort
 from flask import make_response
@@ -6,10 +7,9 @@ from flask.ext.httpauth import HTTPBasicAuth
 
 from config import config
 from database import Database
-from models.address import Address
 from models.patient import Patient
 from models.humanname import HumanName
-from resource_convert import ResourceConverter
+
 import os
 
 app = Flask(__name__)
@@ -44,13 +44,12 @@ def get_patient(id):
         row = db.read_patient(id)
         p = Patient()
         p.name=[HumanName()]
-        p.name[0].family = [row['achternaam']]
-        # p.address = [Address()]
-        # p.address[0].city = row['plaats']
-        # p.address[0].country = row['land']
-        # p.address[0].line = [row['straat'] ]
-
-        json =  p.as_json()
+        p.name[0].family = [row['achternaam'], row['partnerachternaam']]
+        p.name[0].prefix = [row['tussenvoegsel'], row['partnertussenvoegsel']]
+        p.name[0].text = str(row['achternaam'])+str(row['partnerachternaam'] or '')
+        p.gender = str(row['geslacht']).lower().replace('m', 'male').replace('v', 'female')
+        # p.birthDate = row['geboortedatum']
+        json = p.as_json()
         if not json:
             return "niet gevonden", 404
         return jsonify(json)

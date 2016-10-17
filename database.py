@@ -95,14 +95,48 @@ class Database():
     def read_patient(self, id):
 
         sql = """
-            SELECT achternaam
+            SELECT VOORLETTERS
+                  ,ROEPNAAM
+                  ,TUSSENVOEGSEL
+                  ,ACHTERNAAM
+                  ,GEBOORTEDATUM
+                  ,GESLACHT
+                  ,TELEFOONNUMMER1
+                  ,TELEFOONNUMMER2
+                  ,EMAIL
+                  ,GEBOORTEPLAATS
+                  ,BURGELIJKESTAAT
+                  ,PARTNERTUSSENVOEGSEL
+                  ,PARTNERACHTERNAAM
+                  ,NAAMGEBRUIK
+                  ,INSCHRIJFDATUM
+                  ,UITSCHRIJFDATUM
+                  ,BSN
             FROM persoon_hstage
-            WHERE _id = {}
+            INNER JOIN patient_hstage on patient_hstage.id = persoon_hstage.patient_direct_id
+            WHERE persoon_hstage._id = {}
         """.format(id)
         rows = self.execute_read(sql)
+        print(rows)
         row = {}
-        row['achternaam'] = rows[0][0]
 
+        row['voorletters'] = rows[0][0]
+        row['roepnaam'] = rows[0][1]
+        row['tussenvoegsel'] = rows[0][2]
+        row['achternaam'] = rows[0][3]
+        row['geboortedatum'] = rows[0][4]
+        row['geslacht'] = rows[0][5]
+        row['telefoonnummer1'] = rows[0][6]
+        row['telefoonnummer2'] = rows[0][7]
+        row['email'] = rows[0][8]
+        row['geboorteplaats'] = rows[0][9]
+        row['burgelijkestaat'] = rows[0][10]
+        row['partnertussenvoegsel'] = rows[0][11]
+        row['partnerachternaam'] = rows[0][12]
+        row['naamgebruik'] = rows[0][13]
+        row['inschrijfdatum'] = rows[0][14]
+        row['uitschrijfdatum'] = rows[0][15]
+        row['bsn'] = rows[0][16]
 
         return row
 
