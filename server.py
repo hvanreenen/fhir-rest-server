@@ -51,7 +51,7 @@ def get_patient(id):
         p.name[0].text = str(row['achternaam'])+str(row['partnerachternaam'] or '')
         p.gender = str(row['geslacht']).lower().replace('m', 'male').replace('v', 'female')
         p.birthDate = FHIRDate()
-        p.birthDate.date = str(row['geboortedatum'])[10:]
+        p.birthDate = datetime.datetime.strptime(str(row['geboortedatum'])[10:], "%Y-%m-%d%H%M%S")
         json = p.as_json()
         if not json:
             return "niet gevonden", 404
