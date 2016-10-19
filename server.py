@@ -9,9 +9,9 @@ from config import config
 from database import Database
 from models.patient import Patient
 from models.humanname import HumanName
+from models.identifier import Identifier
 from models.fhirdate import FHIRDate
 
-import datetime
 import os
 
 app = Flask(__name__)
@@ -48,10 +48,16 @@ def get_patient(id):
         p.name=[HumanName()]
         p.name[0].family = [row['achternaam'], row['partnerachternaam']]
         p.name[0].prefix = [row['tussenvoegsel'], row['partnertussenvoegsel']]
-        p.name[0].text = str(row['achternaam'])+str(row['partnerachternaam'] or '')
+        p.name[0].text = str(row['achternaam'])+' '+str(row['partnerachternaam'] or '')
         p.gender = str(row['geslacht']).lower().replace('m', 'male').replace('v', 'female')
-        p.birthDate = FHIRDate()
-        p.birthDate = datetime.datetime.strptime(str(row['geboortedatum'])[10:], "%Y-%m-%d%H%M%S")
+        p.birthDate = FHIRDate(row['geboortedatum'])
+        p.identifier = [Identifier()]
+        p.identifier[0].value = row['patientid']
+        p.identifier[0].use = 'usual'
+        p.identifier[0].system = 'Promedico'
+        p.identifier[1].value = row['bsn']
+        p.identifier[1].use = 'official'
+        p.identifier[1].system = 'BSN'
         json = p.as_json()
         if not json:
             return "niet gevonden", 404

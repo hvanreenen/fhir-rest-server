@@ -112,6 +112,7 @@ class Database():
                   ,INSCHRIJFDATUM
                   ,UITSCHRIJFDATUM
                   ,BSN
+                  ,PATIENT_DIRECT_ID
             FROM persoon_hstage
             INNER JOIN patient_hstage on patient_hstage.id = persoon_hstage.patient_direct_id
             WHERE persoon_hstage._id = {}
@@ -137,6 +138,7 @@ class Database():
         row['inschrijfdatum'] = rows[0][14]
         row['uitschrijfdatum'] = rows[0][15]
         row['bsn'] = rows[0][16]
+        row['patientid'] = rows[0][17]
 
         return row
 
