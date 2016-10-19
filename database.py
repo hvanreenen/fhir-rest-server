@@ -93,7 +93,6 @@ class Database():
         self.execute(sql)
 
     def read_patient(self, id):
-
         sql = """
             SELECT VOORLETTERS
                   ,ROEPNAAM
@@ -120,7 +119,6 @@ class Database():
         rows = self.execute_read(sql)
 
         row = {}
-
         row['voorletters'] = rows[0][0]
         row['roepnaam'] = rows[0][1]
         row['tussenvoegsel'] = rows[0][2]
@@ -139,6 +137,11 @@ class Database():
         row['uitschrijfdatum'] = rows[0][15]
         row['bsn'] = rows[0][16]
         row['patientid'] = rows[0][17]
-
         return row
+
+    def insert_patient(self, json=''):
+        json = str(json).replace("'", '"')
+        sql = """INSERT INTO persoon_hstage
+        VALUES ('{}', '{}')""".format(str(json).replace("'", '"'))
+        self.execute(sql)
 

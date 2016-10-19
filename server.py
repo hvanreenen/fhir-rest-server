@@ -51,30 +51,30 @@ def get_patient(id):
         p.name[0].text = str(row['achternaam'])+' '+str(row['partnerachternaam'] or '')
         p.gender = str(row['geslacht']).lower().replace('m', 'male').replace('v', 'female')
         p.birthDate = FHIRDate(row['geboortedatum'])
-        p.identifier = [Identifier()]
+        p.identifier = [Identifier(), Identifier()]
         p.identifier[0].value = row['patientid']
         p.identifier[0].use = 'usual'
-        p.identifier[0].system = 'Promedico'
+        p.identifier[0].system = 'https://www.promedico-asp.nl/his/'
         p.identifier[1].value = row['bsn']
         p.identifier[1].use = 'official'
-        p.identifier[1].system = 'BSN'
+        p.identifier[1].system = 'http://fhir.nl/fhir/NamingSystem/bsn'
         json = p.as_json()
         if not json:
             return "niet gevonden", 404
         return jsonify(json)
     except Exception as ex:
         print(ex.args[0])
-        return 'Er is een fout' + ex.args[0], 500
+        return 'Er is een fout: ' + ex.args[0], 500
 
 
 
 @app.route('/Patient', methods=['POST'])
-def create_patient(res_name: str):
+def create_patient():
     if not request.json:
         print('400')
         abort(400)
     db = Database(config)
-    # db.insert_patient(request.json)
+    db.insert_patient(request.json)
     return jsonify({}), 201
 
 @app.route('/Patient/<int:id>', methods=['PUT'])
@@ -83,6 +83,34 @@ def update_patient(id):
     # db.update_patient(id, request.json)
     return jsonify({}), 201
 
+
+json = """
+{
+  "birthDate": "1909-03-28 00:00:00",
+  "gender": "female",
+  "identifier": [
+    {
+      "system": "https://www.promedico-asp.nl/his/",
+      "use": "usual",
+      "value": "1577845285"
+    },
+    {
+      "system": "http://fhir.nl/fhir/NamingSystem/bsn",
+      "use": "official",
+      "value": "999"
+    }
+  ],
+  "name": [
+    {
+      "family": [
+        "Heynis",
+        "Saane"
+      ]
+    }
+  ],
+  "resourceType": "Patient"
+}
+"""
 
 if __name__ == '__main__':
     app.run()
