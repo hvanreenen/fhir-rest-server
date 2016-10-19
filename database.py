@@ -117,7 +117,6 @@ class Database():
             WHERE persoon_hstage._id = {}
         """.format(id)
         rows = self.execute_read(sql)
-
         row = {}
         row['voorletters'] = rows[0][0]
         row['roepnaam'] = rows[0][1]
@@ -141,7 +140,8 @@ class Database():
 
     def insert_patient(self, json=''):
         json = str(json).replace("'", '"')
-        sql = """INSERT INTO persoon_hstage
-        VALUES ('{}', '{}')""".format(str(json).replace("'", '"'))
+        print(json)
+        sql = """INSERT INTO persoon_hstage (achternaam) SELECT '"""+json+"""'"""
+        print(sql)
         self.execute(sql)
 

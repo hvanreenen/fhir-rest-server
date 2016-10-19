@@ -70,6 +70,7 @@ def get_patient(id):
 
 @app.route('/Patient', methods=['POST'])
 def create_patient():
+    print(request.json)
     if not request.json:
         print('400')
         abort(400)
