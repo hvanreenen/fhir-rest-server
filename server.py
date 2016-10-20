@@ -13,6 +13,7 @@ from models.identifier import Identifier
 from models.fhirdate import FHIRDate
 
 import os
+import datetime
 
 app = Flask(__name__)
 auth = HTTPBasicAuth()
@@ -45,12 +46,13 @@ def get_patient(id):
         db = Database(config)
         row = db.read_patient(id)
         p = Patient()
-        p.name=[HumanName()]
-        p.name[0].family = [row['achternaam'], row['partnerachternaam']]
-        p.name[0].prefix = [row['tussenvoegsel'], row['partnertussenvoegsel']]
-        p.name[0].text = str(row['achternaam'])+' '+str(row['partnerachternaam'] or '')
+        p.name=[HumanName(), HumanName()]
+        p.name[0].family = [row['achternaam']]
+        p.name[0].prefix = [row['tussenvoegsel']]
+        p.name[1].family = [row['partnerachternaam']]
+        p.name[1].prefix = [row['partnertussenvoegsel']]
         p.gender = str(row['geslacht']).lower().replace('m', 'male').replace('v', 'female')
-        p.birthDate = FHIRDate(row['geboortedatum'])
+        p.birthDate = FHIRDate(row['geboortedatum'][:10])
         p.identifier = [Identifier(), Identifier()]
         p.identifier[0].value = row['patientid']
         p.identifier[0].use = 'usual'
@@ -84,34 +86,6 @@ def update_patient(id):
     # db.update_patient(id, request.json)
     return jsonify({}), 201
 
-
-json = """
-{
-  "birthDate": "1909-03-28 00:00:00",
-  "gender": "female",
-  "identifier": [
-    {
-      "system": "https://www.promedico-asp.nl/his/",
-      "use": "usual",
-      "value": "1577845285"
-    },
-    {
-      "system": "http://fhir.nl/fhir/NamingSystem/bsn",
-      "use": "official",
-      "value": "999"
-    }
-  ],
-  "name": [
-    {
-      "family": [
-        "Heynis",
-        "Saane"
-      ]
-    }
-  ],
-  "resourceType": "Patient"
-}
-"""
 
 if __name__ == '__main__':
     app.run()
